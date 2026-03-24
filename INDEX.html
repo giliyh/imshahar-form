@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הובלות עם שחר — הצטרפות לשירות</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root {
+  --navy: #1a3a5c;
+  --navy-dark: #0d2440;
+  --navy-mid: #1e4a7a;
+  --gold: #e8b84b;
+  --gold-light: #f5d57e;
+  --gold-pale: #fdf3d7;
+  --white: #ffffff;
+  --off-white: #f7f9fc;
+  --text-main: #1a2a3a;
+  --text-muted: #6b7f94;
+  --border: #d4dfe8;
+  --success: #2ecc71;
+  --danger: #e74c3c;
+  --radius: 12px;
+  --shadow-lg: 0 20px 60px rgba(26,58,92,0.2);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Heebo', sans-serif;
+  direction: rtl;
+  background: linear-gradient(135deg, #0d2440 0%, #1a3a5c 50%, #1e4a7a 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 32px 16px 60px;
+  position: relative;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  top: -30%; left: -20%;
+  width: 70vw; height: 70vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,184,75,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.container { width: 100%; max-width: 700px; position: relative; z-index: 1; }
+
+/* HEADER */
+.header { text-align: center; margin-bottom: 24px; animation: fadeDown 0.6s ease both; }
+.logo-wrap { display: inline-block; background: rgba(255,255,255,0.07); border: 1px solid rgba(232,184,75,0.25); border-radius: 16px; padding: 14px 28px; margin-bottom: 12px; backdrop-filter: blur(10px); }
+.logo-wrap img { height: 52px; object-fit: contain; }
+.header-tagline { color: rgba(255,255,255,0.55); font-size: 13px; }
+
+/* ALERT BANNER */
+.alert-banner {
+  background: rgba(232,184,75,0.12);
+  border: 1.5px solid rgba(232,184,75,0.35);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  animation: fadeDown 0.6s 0.05s ease both;
+}
+.alert-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.alert-body { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.65; }
+.alert-body strong { color: var(--gold-light); }
+.alert-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.alert-tag {
+  background: rgba(232,184,75,0.15);
+  border: 1px solid rgba(232,184,75,0.3);
+  border-radius: 20px;
+  padding: 3px 11px;
+  font-size: 12px;
+  color: var(--gold-light);
+  font-weight: 500;
+}
+
+/* PROGRESS */
+.progress-wrap { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 24px; animation: fadeDown 0.6s 0.1s ease both; }
+.step-dot { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.step-circle { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.35); transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1); position: relative; z-index: 2; }
+.step-dot.active .step-circle { background: var(--gold); border-color: var(--gold); color: var(--navy-dark); transform: scale(1.15); box-shadow: 0 0 0 6px rgba(232,184,75,0.2); }
+.step-dot.done .step-circle { background: var(--success); border-color: var(--success); color: white; font-size: 16px; }
+.step-label { font-size: 10.5px; color: rgba(255,255,255,0.32); font-weight: 500; white-space: nowrap; transition: color 0.3s; }
+.step-dot.active .step-label { color: var(--gold-light); }
+.step-dot.done .step-label { color: rgba(255,255,255,0.55); }
+.step-line { width: 52px; height: 2px; background: rgba(255,255,255,0.1); margin: 0 3px 22px; transition: background 0.5s; position: relative; overflow: hidden; }
+.step-line.filled::after { content: ''; position: absolute; right: 0; top: 0; height: 100%; width: 100%; background: var(--gold); animation: fillLine 0.5s ease forwards; }
+@keyframes fillLine { from { width: 0; } to { width: 100%; } }
+
+/* CARD */
+.card { background: var(--white); border-radius: 20px; box-shadow: var(--shadow-lg); overflow: hidden; animation: slideUp 0.5s 0.15s ease both; position: relative; }
+.card-header { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%); padding: 22px 28px 18px; display: flex; align-items: center; gap: 14px; border-bottom: 2px solid var(--gold); }
+.card-icon { width: 44px; height: 44px; background: rgba(232,184,75,0.15); border: 1.5px solid rgba(232,184,75,0.4); border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.card-title { font-size: 17px; font-weight: 700; color: var(--white); }
+.card-sub { font-size: 12.5px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+.card-body { padding: 26px 28px 30px; }
+
+/* STEPS */
+.step { display: none; }
+.step.active { display: block; animation: stepIn 0.4s ease both; }
+@keyframes stepIn { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: translateX(0); } }
+
+/* FIELDS */
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.f-full { grid-column: 1 / -1; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 4px; }
+.req { color: var(--danger); font-size: 13px; }
+.field input, .field textarea, .field select {
+  font-family: 'Heebo', sans-serif; font-size: 14px; direction: rtl;
+  border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 13px;
+  color: var(--text-main); background: var(--off-white); outline: none; transition: all 0.2s; width: 100%;
+}
+.field input:focus, .field textarea:focus { border-color: var(--navy-mid); background: #fff; box-shadow: 0 0 0 4px rgba(26,74,122,0.08); }
+.field textarea { resize: vertical; min-height: 78px; line-height: 1.65; }
+.field.has-error input, .field.has-error textarea, .field.has-error select { border-color: var(--danger); background: #fff5f5; }
+.error-msg { font-size: 11.5px; color: var(--danger); display: none; }
+.field.has-error .error-msg { display: block; }
+
+/* DIVIDER */
+.sec-divider { display: flex; align-items: center; gap: 10px; margin: 18px 0 14px; }
+.sec-divider span { font-size: 11.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+.sec-divider::before, .sec-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* QTY */
+.qty-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+.qty-card { background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%); border-radius: 11px; padding: 14px 10px 12px; text-align: center; border: 1px solid rgba(232,184,75,0.2); transition: transform 0.2s; }
+.qty-card:hover { transform: translateY(-2px); }
+.qty-emoji { font-size: 20px; margin-bottom: 5px; display: block; }
+.qty-lbl { font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,0.55); margin-bottom: 8px; }
+.qty-card input { width: 100%; text-align: center; font-size: 19px; font-weight: 700; color: var(--gold); border: 1.5px solid rgba(232,184,75,0.22); border-radius: 7px; padding: 7px 4px; background: rgba(255,255,255,0.05); font-family: 'Heebo', sans-serif; outline: none; transition: all 0.2s; }
+.qty-card input:focus { border-color: var(--gold); background: rgba(232,184,75,0.08); box-shadow: 0 0 0 3px rgba(232,184,75,0.15); }
+.qty-card input::placeholder { color: rgba(255,255,255,0.2); font-size: 13px; font-weight: 400; }
+.qty-sub { font-size: 10px; color: rgba(255,255,255,0.32); margin-top: 4px; }
+
+/* IMAGE UPLOAD */
+.upload-area {
+  border: 2px dashed var(--border);
+  border-radius: 11px;
+  padding: 20px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--off-white);
+  position: relative;
+}
+.upload-area:hover { border-color: var(--navy-mid); background: #eef4fb; }
+.upload-area.has-file { border-color: var(--success); background: #f0fff6; border-style: solid; }
+.upload-icon { font-size: 28px; margin-bottom: 6px; }
+.upload-title { font-size: 13.5px; font-weight: 600; color: var(--text-main); margin-bottom: 3px; }
+.upload-sub { font-size: 12px; color: var(--text-muted); }
+.upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.file-preview { display: none; align-items: center; gap: 10px; margin-top: 10px; background: white; border-radius: 8px; padding: 8px 12px; border: 1px solid var(--border); }
+.file-preview.show { display: flex; }
+.file-preview img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+.file-name { font-size: 12.5px; color: var(--text-main); font-weight: 500; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-remove { width: 24px; height: 24px; border-radius: 50%; background: #fee; border: 1px solid #fcc; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--danger); transition: background 0.15s; flex-shrink: 0; }
+.file-remove:hover { background: #fcc; }
+
+/* CONDITIONS */
+.conds { display: flex; flex-direction: column; gap: 8px; }
+.ci { display: flex; align-items: flex-start; gap: 11px; font-size: 13.5px; color: var(--text-main); line-height: 1.55; background: var(--off-white); border-radius: 10px; padding: 11px 13px; border: 1px solid var(--border); }
+.ci-icon { width: 28px; height: 28px; background: linear-gradient(135deg, var(--navy), var(--navy-mid)); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.ci.highlight { background: #fff8e8; border-color: rgba(232,184,75,0.5); }
+.ci.danger-ci { background: #fff5f5; border-color: rgba(231,76,60,0.25); }
+.ci.danger-ci .ci-icon { background: linear-gradient(135deg, #c0392b, var(--danger)); }
+.min-b { display: inline-block; background: var(--gold-pale); color: #a07010; font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 20px; margin-left: 4px; border: 1px solid rgba(232,184,75,0.4); }
+.red-b { display: inline-block; background: #fee; color: var(--danger); font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 20px; margin-left: 4px; border: 1px solid rgba(231,76,60,0.25); }
+
+/* SUMMARY */
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 14px; }
+.sum-item { background: var(--off-white); border: 1px solid var(--border); border-radius: 9px; padding: 11px 13px; }
+.sum-label { font-size: 10.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
+.sum-val { font-size: 13.5px; font-weight: 600; color: var(--text-main); }
+.sum-full { grid-column: 1 / -1; }
+.qty-summary { display: grid; grid-template-columns: repeat(3,1fr); gap: 9px; margin-bottom: 14px; }
+.qty-sum-card { background: linear-gradient(135deg, var(--navy-dark), var(--navy)); border-radius: 9px; padding: 11px 9px; text-align: center; border: 1px solid rgba(232,184,75,0.2); }
+.qty-sum-num { font-size: 21px; font-weight: 800; color: var(--gold); }
+.qty-sum-lbl { font-size: 10.5px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+/* BUTTONS */
+.btn-row { display: flex; gap: 11px; margin-top: 22px; align-items: center; }
+.btn-next { flex: 1; background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%); color: white; border: none; border-radius: 11px; padding: 13px 22px; font-size: 14.5px; font-weight: 700; font-family: 'Heebo', sans-serif; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; box-shadow: 0 4px 16px rgba(26,58,92,0.3); }
+.btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,58,92,0.4); }
+.btn-send { flex: 1; background: linear-gradient(135deg, var(--gold) 0%, #d4a030 100%); color: var(--navy-dark); border: none; border-radius: 11px; padding: 13px 22px; font-size: 14.5px; font-weight: 800; font-family: 'Heebo', sans-serif; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; box-shadow: 0 4px 20px rgba(232,184,75,0.4); }
+.btn-send:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,184,75,0.5); }
+.btn-send:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.btn-back { width: 42px; height: 42px; background: transparent; border: 1.5px solid var(--border); border-radius: 9px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 17px; transition: all 0.2s; font-family: 'Heebo', sans-serif; flex-shrink: 0; }
+.btn-back:hover { background: var(--off-white); border-color: var(--navy); color: var(--navy); }
+
+/* SENDING */
+.sending-overlay { display: none; position: absolute; inset: 0; background: rgba(255,255,255,0.93); border-radius: 20px; z-index: 100; align-items: center; justify-content: center; flex-direction: column; gap: 14px; }
+.sending-overlay.show { display: flex; }
+.spinner { width: 42px; height: 42px; border: 3px solid var(--border); border-top-color: var(--navy); border-radius: 50%; animation: spin 0.7s linear infinite; }
+.sending-text { font-size: 14px; font-weight: 600; color: var(--text-main); }
+
+/* SUCCESS */
+.success-screen { display: none; text-align: center; padding: 44px 28px; animation: fadeUp 0.6s ease both; }
+.success-screen.show { display: block; }
+.success-icon { width: 76px; height: 76px; background: linear-gradient(135deg, var(--success), #27ae60); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 18px; animation: popIn 0.5s 0.2s cubic-bezier(0.34,1.56,0.64,1) both; box-shadow: 0 8px 30px rgba(46,204,113,0.35); }
+.success-title { font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; }
+.success-sub { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin-bottom: 22px; }
+.success-email-badge { display: inline-flex; align-items: center; gap: 7px; background: var(--navy); color: var(--gold-light); border-radius: 24px; padding: 9px 22px; font-size: 13.5px; font-weight: 600; }
+
+/* KEYFRAMES */
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 520px) {
+  body { padding: 16px 10px 40px; }
+  .fields { grid-template-columns: 1fr; }
+  .f-full { grid-column: 1; }
+  .qty-row { grid-template-columns: 1fr; }
+  .card-body { padding: 18px 16px 22px; }
+  .card-header { padding: 16px 18px; }
+  .step-line { width: 30px; }
+  .alert-banner { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-wrap">
+      <img src="data:image/png;base64,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" alt="הובלות עם שחר" style="height:52px;object-fit:contain;" />
+    </div>
+    <p class="header-tagline">שינוע והפצה מתקדמים — חלקי חילוף, אופנועים ותעשייה</p>
+  </div>
+
+  <!-- ALERT BANNER -->
+  <div class="alert-banner">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-body">
+      <strong>שירות לעסקים בלבד — תנאי קבלה:</strong><br>
+      הובלות עם שחר מחלקת אך ורק בתחום <strong>חלקי חילוף, אופנועים ותעשייה</strong>. לא מתבצעת חלוקה ללקוחות פרטיים.
+      <div class="alert-tags">
+        <span class="alert-tag">⚡ מינימום 50 מארזים/חודש</span>
+        <span class="alert-tag">🏦 חובה הוראת קבע</span>
+        <span class="alert-tag">🏭 תעשייה וחלפים בלבד</span>
+        <span class="alert-tag">🏢 עסקים בלבד</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="step-dot active" id="dot1"><div class="step-circle">1</div><div class="step-label">פרטי עסק</div></div>
+    <div class="step-line" id="line1"></div>
+    <div class="step-dot" id="dot2"><div class="step-circle">2</div><div class="step-label">איש קשר</div></div>
+    <div class="step-line" id="line2"></div>
+    <div class="step-dot" id="dot3"><div class="step-circle">3</div><div class="step-label">שינוע</div></div>
+    <div class="step-line" id="line3"></div>
+    <div class="step-dot" id="dot4"><div class="step-circle">4</div><div class="step-label">אישור</div></div>
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+    <div class="sending-overlay" id="sendingOverlay">
+      <div class="spinner"></div>
+      <div class="sending-text">שולח את הפרטים...</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step active" id="step1">
+      <div class="card-header">
+        <div class="card-icon">🏢</div>
+        <div><div class="card-title">פרטי העסק</div><div class="card-sub">מלאו את פרטי החברה / העסק</div></div>
+      </div>
+      <div class="card-body">
+        <div class="fields">
+          <div class="field f-full" id="f-bizname">
+            <label>שם העסק <span class="req">*</span></label>
+            <input type="text" id="bizname" placeholder="שם החברה / העסק" />
+            <span class="error-msg">שדה חובה</span>
+          </div>
+          <div class="field" id="f-bizid">
+            <label>ח.פ / ע.מ <span class="req">*</span></label>
+            <input type="text" id="bizid" placeholder="מספר חברה / עוסק" />
+            <span class="error-msg">שדה חובה</span>
+          </div>
+          <div class="field" id="f-city">
+            <label>ישוב <span class="req">*</span></label>
+            <input type="text" id="city" placeholder="עיר / ישוב" />
+            <span class="error-msg">שדה חובה</span>
+          </div>
+          <div class="field f-full" id="f-address">
+            <label>כתובת מלאה <span class="req">*</span></label>
+            <input type="text" id="address" placeholder="רחוב, מספר בית, מיקוד" />
+            <span class="error-msg">שדה חובה</span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-next" onclick="nextStep(1)">המשך לשלב הבא ←</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" id="step2">
+      <div class="card-header">
+        <div class="card-icon">👤</div>
+        <div><div class="card-title">איש קשר</div><div class="card-sub">פרטי האדם האחראי לתיאום</div></div>
+      </div>
+      <div class="card-body">
+        <div class="fields">
+          <div class="field f-full" id="f-contact">
+            <label>שם מלא <span class="req">*</span></label>
+            <input type="text" id="contact" placeholder="שם פרטי + שם משפחה" />
+            <span class="error-msg">שדה חובה</span>
+          </div>
+          <div class="field" id="f-mobile">
+            <label>נייד <span class="req">*</span></label>
+            <input type="tel" id="mobile" placeholder="05X-XXXXXXX" />
+            <span class="error-msg">הכנס מספר תקין</span>
+          </div>
+          <div class="field">
+            <label>טלפון עסקי</label>
+            <input type="tel" id="phone" placeholder="0X-XXXXXXX" />
+          </div>
+          <div class="field f-full" id="f-email">
+            <label>כתובת מייל <span class="req">*</span></label>
+            <input type="email" id="email" placeholder="name@company.co.il" />
+            <span class="error-msg">הכנס מייל תקין</span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-back" onclick="prevStep(2)">→</button>
+          <button class="btn-next" onclick="nextStep(2)">המשך ←</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" id="step3">
+      <div class="card-header">
+        <div class="card-icon">📦</div>
+        <div><div class="card-title">פרטי השינוע</div><div class="card-sub">תחום עיסוק, כמויות ותמונות</div></div>
+      </div>
+      <div class="card-body">
+        <div class="fields">
+          <div class="field f-full" id="f-industry">
+            <label>תחום עיסוק <span class="req">*</span></label>
+            <input type="text" id="industry" placeholder="לדוגמה: חלקי חילוף לרכב / ציוד תעשייתי / אופנועים..." />
+            <span class="error-msg">שדה חובה</span>
+          </div>
+          <div class="field f-full" id="f-cargo">
+            <label>תיאור תוכן החבילות <span class="req">*</span></label>
+            <textarea id="cargo" placeholder="תארו בפירוט את סוג המוצרים — מה מכילות החבילות, גודל, אריזה..."></textarea>
+            <span class="error-msg">שדה חובה</span>
+          </div>
+          <div class="field f-full">
+            <label>דוגמת לקוחות קצה</label>
+            <input type="text" id="customers" placeholder="לדוגמה: מוסכים, חנויות חלקים, מפעלים, מרכזי שירות..." />
+          </div>
+          <div class="field f-full">
+            <label>אזורי חלוקה</label>
+            <input type="text" id="zones" placeholder="לדוגמה: מרכז, צפון, דרום, כל הארץ..." />
+          </div>
+        </div>
+
+        <!-- קטע כמויות מודגש -->
+        <div style="background:linear-gradient(135deg,#0d2440,#1a3a5c);border-radius:14px;padding:18px 16px 14px;margin:18px 0;border:2px solid rgba(232,184,75,0.5);box-shadow:0 4px 20px rgba(26,58,92,0.25);">
+          <div style="text-align:center;margin-bottom:14px;">
+            <span style="background:rgba(232,184,75,0.18);border:1px solid rgba(232,184,75,0.4);border-radius:20px;padding:5px 16px;font-size:12px;font-weight:700;color:#e8b84b;letter-spacing:0.06em;text-transform:uppercase;">⚡ כמויות חודשיות משוערות — שדה חובה</span>
+          </div>
+          <div class="qty-row">
+            <div class="qty-card" style="border:1.5px solid rgba(232,184,75,0.4);">
+              <span class="qty-emoji">📦</span>
+              <div class="qty-lbl">מארזים / חבילות</div>
+              <input type="number" id="qtyBoxes" min="0" placeholder="0" />
+              <div class="qty-sub">יחידות לחודש</div>
+            </div>
+            <div class="qty-card" style="border:1.5px solid rgba(232,184,75,0.4);">
+              <span class="qty-emoji">🏗️</span>
+              <div class="qty-lbl">משטחים (פלטים)</div>
+              <input type="number" id="qtyPallets" min="0" placeholder="0" />
+              <div class="qty-sub">יחידות לחודש</div>
+            </div>
+            <div class="qty-card" style="border:1.5px solid rgba(232,184,75,0.4);">
+              <span class="qty-emoji">⚖️</span>
+              <div class="qty-lbl">משקל ממוצע למארז</div>
+              <input type="text" id="weight" placeholder='0 ק"ג' />
+              <div class="qty-sub">קילוגרמים</div>
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:10px;font-size:11.5px;color:rgba(255,255,255,0.4);">מינימום 50 מארזים לחודש לתחילת עבודה</div>
+        </div>
+
+        <div class="sec-divider"><span>תמונות משלוחים (אופציונלי)</span></div>
+        <div class="upload-area" id="uploadArea">
+          <div class="upload-icon">📸</div>
+          <div class="upload-title">העלו תמונה של המשלוחים / האריזות</div>
+          <div class="upload-sub">JPG, PNG עד 5MB — לחצו או גררו לכאן</div>
+          <input type="file" id="photoInput" accept="image/*" onchange="handleFile(this)" />
+        </div>
+        <div class="file-preview" id="filePreview">
+          <img id="previewImg" src="" alt="תצוגה מקדימה" />
+          <span class="file-name" id="fileName"></span>
+          <button class="file-remove" onclick="removeFile()">✕</button>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-back" onclick="prevStep(3)">→</button>
+          <button class="btn-next" onclick="nextStep(3)">לסיכום ←</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step" id="step4">
+      <div class="card-header">
+        <div class="card-icon">✅</div>
+        <div><div class="card-title">סיכום ואישור</div><div class="card-sub">בדקו את הפרטים לפני שליחה</div></div>
+      </div>
+      <div class="card-body">
+        <div class="summary-grid">
+          <div class="sum-item"><div class="sum-label">שם העסק</div><div class="sum-val" id="s-bizname">—</div></div>
+          <div class="sum-item"><div class="sum-label">ח.פ / ע.מ</div><div class="sum-val" id="s-bizid">—</div></div>
+          <div class="sum-item"><div class="sum-label">כתובת</div><div class="sum-val" id="s-address">—</div></div>
+          <div class="sum-item"><div class="sum-label">ישוב</div><div class="sum-val" id="s-city">—</div></div>
+          <div class="sum-item"><div class="sum-label">איש קשר</div><div class="sum-val" id="s-contact">—</div></div>
+          <div class="sum-item"><div class="sum-label">נייד</div><div class="sum-val" id="s-mobile">—</div></div>
+          <div class="sum-item sum-full"><div class="sum-label">מייל</div><div class="sum-val" id="s-email">—</div></div>
+          <div class="sum-item"><div class="sum-label">תחום עיסוק</div><div class="sum-val" id="s-industry">—</div></div>
+          <div class="sum-item"><div class="sum-label">לקוחות קצה</div><div class="sum-val" id="s-customers">—</div></div>
+          <div class="sum-item sum-full"><div class="sum-label">תוכן חבילות</div><div class="sum-val" id="s-cargo">—</div></div>
+        </div>
+
+        <div class="qty-summary">
+          <div class="qty-sum-card"><div class="qty-sum-num" id="s-boxes">0</div><div class="qty-sum-lbl">מארזים לחודש</div></div>
+          <div class="qty-sum-card"><div class="qty-sum-num" id="s-pallets">0</div><div class="qty-sum-lbl">משטחים לחודש</div></div>
+          <div class="qty-sum-card"><div class="qty-sum-num" id="s-weight">—</div><div class="qty-sum-lbl">משקל למארז</div></div>
+        </div>
+
+        <div class="conds">
+          <div class="ci highlight"><div class="ci-icon">⚡</div><span><span class="min-b">מינימום</span> 50 מארזים ברמה חודשית עם התחייבות — בלעדיה לא מתחילים</span></div>
+          <div class="ci highlight"><div class="ci-icon">🏦</div><span><span class="min-b">חובה</span> חתימה על הוראת קבע בנקאית — תנאי מחייב לתחילת עבודה</span></div>
+          <div class="ci danger-ci"><div class="ci-icon">🚫</div><span><span class="red-b">לא מחלקים</span> ללקוחות פרטיים — שירות לעסקים בלבד</span></div>
+          <div class="ci danger-ci"><div class="ci-icon">🏭</div><span><span class="red-b">תחום בלבד</span> חלקי חילוף, אופנועים ותעשייה — לא מחלקים מחוץ לתחום</span></div>
+          <div class="ci"><div class="ci-icon">📋</div><span>חתימה על הוראות אריזה לפני תחילת עבודה</span></div>
+          <div class="ci"><div class="ci-icon">🔑</div><span>לאחר אישור — גישה למערכת ההקלדות של עם שחר (שם משתמש + סיסמא)</span></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-back" onclick="prevStep(4)">→</button>
+          <button class="btn-send" id="sendBtn" onclick="sendForm()">
+            <span>📨</span> שלח בקשת הצטרפות
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">✓</div>
+      <div class="success-title">הפרטים נשלחו בהצלחה!</div>
+      <div class="success-sub">תודה רבה על פנייתכם.<br>צוות הובלות עם שחר יחזור אליכם בהקדם עם הצעת מחיר מותאמת.</div>
+      <div class="success-email-badge">📧 info@imshahar.com</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const EMAILJS_PUBLIC_KEY  = '28x2LvAuaM3a8Ocva';
+const EMAILJS_SERVICE_ID  = 'service_i51scq4';
+const EMAILJS_TEMPLATE_ID = 'template_notcrn9';
+const TO_EMAIL = 'info@imshahar.com';
+
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
+let currentStep = 1;
+let uploadedImageBase64 = '';
+
+function nextStep(from) {
+  if (!validateStep(from)) return;
+  if (from === 3) buildSummary();
+  goTo(from + 1);
+}
+function prevStep(from) { goTo(from - 1); }
+
+function goTo(n) {
+  document.getElementById('step' + currentStep).classList.remove('active');
+  currentStep = n;
+  document.getElementById('step' + n).classList.add('active');
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dot' + i);
+    dot.classList.remove('active', 'done');
+    if (i < currentStep) { dot.classList.add('done'); dot.querySelector('.step-circle').textContent = '✓'; }
+    else if (i === currentStep) { dot.classList.add('active'); dot.querySelector('.step-circle').textContent = i; }
+    else dot.querySelector('.step-circle').textContent = i;
+    if (i < 4) document.getElementById('line' + i).classList.toggle('filled', i < currentStep);
+  }
+}
+
+function validateStep(step) {
+  let ok = true;
+  const checks = {
+    1: [
+      { id: 'bizname', fid: 'f-bizname', test: v => v.trim() },
+      { id: 'bizid',   fid: 'f-bizid',   test: v => v.trim() },
+      { id: 'city',    fid: 'f-city',    test: v => v.trim() },
+      { id: 'address', fid: 'f-address', test: v => v.trim() },
+    ],
+    2: [
+      { id: 'contact', fid: 'f-contact', test: v => v.trim() },
+      { id: 'mobile',  fid: 'f-mobile',  test: v => /^0[0-9]{8,9}$/.test(v.replace(/-/g,'')) },
+      { id: 'email',   fid: 'f-email',   test: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+    ],
+    3: [
+      { id: 'industry', fid: 'f-industry', test: v => v.trim() },
+      { id: 'cargo',    fid: 'f-cargo',    test: v => v.trim() },
+    ]
+  };
+  (checks[step] || []).forEach(({ id, fid, test }) => {
+    const el = document.getElementById(id);
+    const wrapper = document.getElementById(fid);
+    if (el && wrapper) {
+      const valid = test(el.value);
+      wrapper.classList.toggle('has-error', !valid);
+      if (!valid) ok = false;
+    }
+  });
+  return ok;
+}
+
+function buildSummary() {
+  const g = id => document.getElementById(id).value || '—';
+  document.getElementById('s-bizname').textContent   = g('bizname');
+  document.getElementById('s-bizid').textContent     = g('bizid');
+  document.getElementById('s-city').textContent      = g('city');
+  document.getElementById('s-address').textContent   = g('address');
+  document.getElementById('s-contact').textContent   = g('contact');
+  document.getElementById('s-mobile').textContent    = g('mobile');
+  document.getElementById('s-email').textContent     = g('email');
+  document.getElementById('s-industry').textContent  = g('industry');
+  document.getElementById('s-customers').textContent = g('customers') !== '—' ? g('customers') : 'לא צוין';
+  document.getElementById('s-cargo').textContent     = g('cargo');
+  document.getElementById('s-boxes').textContent     = g('qtyBoxes') !== '—' ? g('qtyBoxes') : '0';
+  document.getElementById('s-pallets').textContent   = g('qtyPallets') !== '—' ? g('qtyPallets') : '0';
+  document.getElementById('s-weight').textContent    = g('weight') !== '—' ? g('weight') : '—';
+}
+
+function handleFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX = 400;
+      let w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      uploadedImageBase64 = canvas.toDataURL('image/jpeg', 0.5);
+      document.getElementById('previewImg').src = uploadedImageBase64;
+      document.getElementById('fileName').textContent = file.name;
+      document.getElementById('filePreview').classList.add('show');
+      document.getElementById('uploadArea').classList.add('has-file');
+      document.querySelector('.upload-title').textContent = 'תמונה נבחרה ✓';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeFile() {
+  uploadedImageBase64 = '';
+  document.getElementById('photoInput').value = '';
+  document.getElementById('filePreview').classList.remove('show');
+  document.getElementById('uploadArea').classList.remove('has-file');
+  document.querySelector('.upload-title').textContent = 'העלו תמונה של המשלוחים / האריזות';
+}
+
+function sendForm() {
+  const btn = document.getElementById('sendBtn');
+  const overlay = document.getElementById('sendingOverlay');
+  const g = id => document.getElementById(id).value || '';
+
+  const params = {
+    to_email:      TO_EMAIL,
+    biz_name:      g('bizname'),
+    biz_id:        g('bizid'),
+    city:          g('city'),
+    address:       g('address'),
+    contact_name:  g('contact'),
+    mobile:        g('mobile'),
+    phone:         g('phone'),
+    email:         g('email'),
+    industry:      g('industry'),
+    cargo:         g('cargo'),
+    customers:     g('customers') || 'לא צוין',
+    zones:         g('zones') || 'לא צוין',
+    qty_boxes:     g('qtyBoxes') || '0',
+    qty_pallets:   g('qtyPallets') || '0',
+    weight:        g('weight') || 'לא צוין',
+    has_photo:     uploadedImageBase64 ? 'כן — צורפה תמונה' : 'לא',
+    photo_url:     uploadedImageBase64 || '',
+  };
+
+  btn.disabled = true;
+  overlay.classList.add('show');
+
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+    .then(() => {
+      overlay.classList.remove('show');
+      document.getElementById('step4').classList.remove('active');
+      document.getElementById('successScreen').classList.add('show');
+    })
+    .catch(err => {
+      overlay.classList.remove('show');
+      btn.disabled = false;
+      alert('שגיאה בשליחה. אנא נסה שנית.\n' + JSON.stringify(err));
+    });
+}
+
+document.querySelectorAll('input, textarea').forEach(el => {
+  el.addEventListener('input', () => {
+    const w = el.closest('.field');
+    if (w) w.classList.remove('has-error');
+  });
+});
+</script>
+</body>
+</html>
