@@ -365,17 +365,8 @@ body::before {
           </div>
           <div class="field f-full" id="f-chomesh" style="display:none;">
             <label>פירוט החומ"ס <span class="req">*</span></label>
-            <select id="chomesh" onchange="toggleChomeshDetails(this.value)">
-              <option value="">-- בחר סוג חומס --</option>
-              <option value="חומ"ס חלקי חילוף">חומ"ס חלקי חילוף</option>
-              <option value="חומ"ס תעשייה">חומ"ס תעשייה</option>
-              <option value="חומ"ס אחר">חומ"ס אחר</option>
-            </select>
+            <textarea id="chomeshDetails" placeholder='פרט את סוג החומ"ס, התכולה, סוג האריזה וכל מידע רלוונטי נוסף...' style="min-height:90px;"></textarea>
             <span class="error-msg">נא לפרט את החומ"ס</span>
-          </div>
-          <div class="field f-full" id="f-chomesh-details" style="display:none;">
-            <label>פירוט החומס</label>
-            <textarea id="chomeshDetails" placeholder="פרט את פירוט החומ"ס, התכולה, סוג האריזה וכל מידע רלוונטי נוסף..." style="min-height:90px;"></textarea>
           </div>
           <div class="field f-full" id="f-cargo">
             <label>תיאור תוכן החבילות <span class="req">*</span></label>
